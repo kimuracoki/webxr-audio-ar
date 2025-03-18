@@ -9,3 +9,9 @@ declare module "*.glb" {
     export default value;
   }
   
+  declare module 'webxr-polyfill' {
+    export default class WebXRPolyfill {
+      constructor();
+    }
+  }
+  

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as THREE from "three";
+import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 
 const GiftBox = () => {
   const modelRef = useRef<THREE.Group>(null);
@@ -32,8 +33,18 @@ const GiftBox = () => {
 };
 
 export default function App() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    // WebXR 用の VRButton を作成して、画面に追加
+    if (canvasRef.current) {
+      const vrButton = VRButton.createButton(canvasRef.current);
+      document.body.appendChild(vrButton);
+    }
+  }, []);
+
   return (
-    <Canvas camera={{ position: [0, 2, 5] }} shadows>
+    <Canvas ref={canvasRef} camera={{ position: [0, 2, 5] }} shadows>
       {/* 照明の設定 */}
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />

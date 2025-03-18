@@ -1,10 +1,10 @@
 import "./App.css";
-import { HelloAR } from "./components/HelloAR";
+import { ImageTexture } from "./components/ImageTexture";
 
 function App() {
   return (
     <>
-      <HelloAR />
+      <ImageTexture />
     </>
   );
 }

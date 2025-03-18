@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as THREE from "three";
-import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
+import { ARButton } from "three/examples/jsm/webxr/ARButton.js";  // ARButtonを使用
 
 const GiftBox = () => {
   const modelRef = useRef<THREE.Group>(null);
@@ -16,7 +16,7 @@ const GiftBox = () => {
           const model = gltf.scene;
           model.traverse((child: any) => {
             if (child.isMesh) {
-              child.material = new THREE.MeshStandardMaterial({ color: 0xffffff }); // モデルのマテリアルを標準的なものに設定
+              child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
             }
           });
           modelRef.current.add(model);
@@ -36,10 +36,10 @@ export default function App() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    // WebXR 用の VRButton を作成して、画面に追加
+    // AR モード用のボタンを作成
     if (canvasRef.current) {
-      const vrButton = VRButton.createButton(canvasRef.current);
-      document.body.appendChild(vrButton);
+      const arButton = ARButton.createButton(canvasRef.current);
+      document.body.appendChild(arButton);
     }
   }, []);
 

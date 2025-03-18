@@ -11,8 +11,13 @@
     "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
+    "@react-three/drei": "^10.0.4",
+    "@react-three/fiber": "^9.1.0",
+    "@react-three/xr": "^6.6.9",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "three": "^0.174.0",
+    "webxr-polyfill": "^2.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

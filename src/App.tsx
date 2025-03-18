@@ -1,7 +1,7 @@
-import { Canvas } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import * as THREE from "three";
+import { Canvas } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import * as THREE from "three";
 
 const GiftBox = () => {
   const modelRef = useRef<THREE.Group>(null);
@@ -9,10 +9,16 @@ const GiftBox = () => {
   useEffect(() => {
     const loader = new GLTFLoader();
     loader.load(
-      "/webxr-audio-ar/giftbox.glb", // `public/` にある場合
+      "/webxr-audio-ar/giftbox.glb", // /public/ のパスに合わせてください
       (gltf) => {
         if (modelRef.current) {
-          modelRef.current.add(gltf.scene);
+          const model = gltf.scene;
+          model.traverse((child: any) => {
+            if (child.isMesh) {
+              child.material = new THREE.MeshStandardMaterial({ color: 0xffffff }); // モデルのマテリアルを標準的なものに設定
+            }
+          });
+          modelRef.current.add(model);
         }
       },
       undefined,
@@ -27,8 +33,12 @@ const GiftBox = () => {
 
 export default function App() {
   return (
-    <Canvas camera={{ position: [0, 2, 5] }}>
+    <Canvas camera={{ position: [0, 2, 5] }} shadows>
+      {/* 照明の設定 */}
       <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
+      
+      {/* AR 用のコンテンツ */}
       <GiftBox />
     </Canvas>
   );

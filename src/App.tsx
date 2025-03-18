@@ -1,42 +1,35 @@
-import { useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
-import WebXRPolyfill from "webxr-polyfill";
+import { useEffect, useRef } from "react";
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-const Model = () => {
-  const { scene } = useGLTF("/src/asset/giftbox.glb");
-  return <primitive object={scene} scale={0.5} />;
-};
-
-const App = () => {
-  const sessionRef = useRef<XRSession | null>(null);
+const GiftBox = () => {
+  const modelRef = useRef<THREE.Group>(null);
 
   useEffect(() => {
-    new WebXRPolyfill(); // WebXR Polyfill を適用
-
-    if (navigator.xr) {
-      navigator.xr
-        .requestSession("immersive-ar", { requiredFeatures: ["local-floor"] })
-        .then((session) => {
-          console.log("AR セッション開始!", session);
-          sessionRef.current = session;
-        })
-        .catch((error) => {
-          console.error("AR セッション開始失敗:", error);
-        });
-    } else {
-      console.error("WebXR に未対応");
-    }
+    const loader = new GLTFLoader();
+    loader.load(
+      "/webxr-audio-ar/giftbox.glb", // `public/` にある場合
+      (gltf) => {
+        if (modelRef.current) {
+          modelRef.current.add(gltf.scene);
+        }
+      },
+      undefined,
+      (error) => {
+        console.error("GLTF loading error:", error);
+      }
+    );
   }, []);
 
-  return (
-    <Canvas>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
-      <Model />
-      <OrbitControls />
-    </Canvas>
-  );
+  return <group ref={modelRef} />;
 };
 
-export default App;
+export default function App() {
+  return (
+    <Canvas camera={{ position: [0, 2, 5] }}>
+      <ambientLight intensity={0.5} />
+      <GiftBox />
+    </Canvas>
+  );
+}
